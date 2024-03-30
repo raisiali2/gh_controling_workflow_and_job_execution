@@ -58,6 +58,22 @@ there are 4 conditional functions in github
 4. `cancelled()` returns true if the workflow has been cancelled
 
 ## conditional jobs
+bellow is an example of `job-level` condition, needs sets the dependency to the other jobs.
+```yml
+# job level condition
+  report:
+    needs: [lint, deploy]
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: output information
+        run: |
+          echo "something went wrong"
+          echo "${{ toJson(github) }}"  
+        # output the github context object
+```
+
+![condition job-level](image.png)
 
 ## more `if` examples
 
