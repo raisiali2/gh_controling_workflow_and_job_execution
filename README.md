@@ -44,7 +44,10 @@ describe('MainContent', () => {
 
 ```
 remove `a` from `('help-are'))` and push changes
+
 ## controlling execution via `if`
+now lets add `if` condition 
+
 ## working with special conditional function
 ## conditional jobs
 ## more `if` examples

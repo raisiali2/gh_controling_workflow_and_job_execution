@@ -34,12 +34,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Test code
+        id: run-tests
         run: npm run test
       # test report make sense when we have failure report 
       # there for make if condition for that
       # like if the step run test failed     
       - name: Upload test report
-        if:
+        if: steps.run-tests.outcome == 'failure'
+        # upload test report 
         uses: actions/upload-artifact@v3
         with:
           name: test-report
