@@ -46,16 +46,29 @@ describe('MainContent', () => {
 remove `a` from `('help-are'))` and push changes
 
 ## controlling execution via `if`
-now lets add `if` condition 
+now lets add `if` condition, specifying that if previous test action failed, then generate the test report.  
+but still it is not enough, even by adding the `if` condition we still see that the test action failed and report does not generated,  
+because still we did not change the default behavior of github action to do that we need to use `failure()` function.
 
 ## working with special conditional function
+a function such as `failure()`
+
 ## conditional jobs
+
 ## more `if` examples
+
 ## ignoring errors & failures with `continue-on-error`
+
 ## understanding and using matrix strategies
+
 ## including and excluding values (matrix strategy)
+
 ## saving time and code with reusable workflows
+
 ## adding inputs to reusable workflows & secrets
+
 ## reusable workflows & secrets
+
 ## reusable workflows outputs
+
 ## module summary
