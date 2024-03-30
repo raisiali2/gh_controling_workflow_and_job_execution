@@ -215,6 +215,8 @@ jobs:
 ![include and exclude](image-5.png)
 
 ## saving time and code with reusable workflows
+reusable workflow example:
+![reusable workflow](image-6.png)
 
 ## adding inputs to reusable workflows & secrets
 
