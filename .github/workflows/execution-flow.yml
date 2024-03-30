@@ -80,3 +80,14 @@ jobs:
         run: ls
       - name: Deploy
         run: echo "Deploying..."
+  # job level condition
+  report:
+    needs: [lint, deploy]
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: output information
+        run: |
+          echo "something went wrong"
+          echo "${{ toJson(github) }}"  
+        # output the github context object
