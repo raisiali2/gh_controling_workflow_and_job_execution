@@ -142,6 +142,36 @@ example of test broken:
 
 
 ## understanding and using matrix strategies
+is used one a specific job run with different configuration
+
+```yml
+name: matrix demo
+on: push
+jobs:
+    build:
+    # to run same job with different configuration use matrix
+    # it might be one of the node-version does not support all the features needed
+    # in this case we use continue with error because of one node other nodes evaluation or execution dont stop
+        continue-on-error: true
+        strategy:
+            matrix:
+                node-version: [12, 14, 16]
+                operating-system: [ubuntu-latest, windows-latest]
+        runs-on: ${{ matrix.operating-system }}
+        steps:
+          - name: get code
+            uses: actions/checkout@v3
+          - name: install nodejs
+            uses: actions/setup-node@v3
+            with: 
+                node-version: 14
+          - name: install dependencies
+            run: npm ci
+          - name: build project
+            run: npm run build
+
+```
+![matrix workflow](image-4.png)
 
 ## including and excluding values (matrix strategy)
 
