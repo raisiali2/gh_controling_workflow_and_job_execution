@@ -40,7 +40,7 @@ jobs:
       # there for make if condition for that
       # like if the step run test failed     
       - name: Upload test report
-        if: steps.run-tests.outcome == 'failure'
+        if: failure() && steps.run-tests.outcome == 'failure'
         # upload test report 
         uses: actions/upload-artifact@v3
         with:
