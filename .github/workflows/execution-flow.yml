@@ -34,7 +34,11 @@ jobs:
         run: npm ci
       - name: Test code
         run: npm run test
+      # test report make sense when we have failure report 
+      # there for make if condition for that
+      # like if the step run test failed     
       - name: Upload test report
+        if:
         uses: actions/upload-artifact@v3
         with:
           name: test-report
