@@ -10,7 +10,16 @@ jobs:
             matrix:
                 node-version: [12, 14, 16]
                 operating-system: [ubuntu-latest, windows-latest]
+                        # add two others matrix features
+                include:
+                    - node-version: 18
+                      operating-system: ubuntu-latest
+                exclude:
+                    - node-version: 12
+                      operating-system: windows-latest
+
         runs-on: ${{ matrix.operating-system }}
+
         steps:
           - name: get code
             uses: actions/checkout@v3
