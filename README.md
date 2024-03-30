@@ -76,6 +76,38 @@ bellow is an example of `job-level` condition, needs sets the dependency to the 
 ![condition job-level](image.png)
 
 ## more `if` examples
+in here we use `if` condition in the step-level to optimize caching such as instead of caching the global `npm` in the `.npm` this time we cache the `components` folder.
+```yml
+- name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          # path: ~/.npm
+          path: node_modules
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+```
+
+![alt text](image-1.png)
+
+as in this time all the previous steps ran successfully and there is no failure the `report:` job did not evaluate or executed.
+```yml
+  # job level condition
+  report:
+    needs: [lint, deploy]
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: output information
+        run: |
+          echo "something went wrong"
+          echo "${{ toJson(github) }}"  
+        # output the github context object
+```
+
+in this 
 
 ## ignoring errors & failures with `continue-on-error`
 
