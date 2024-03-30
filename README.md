@@ -111,6 +111,33 @@ in this
 
 ## ignoring errors & failures with `continue-on-error`
 
+example continue with error:
+```yml
+     - name: Test code
+        continue-on-error: true
+        id: run-tests
+        run: npm run test
+```
+![continue with error](image-2.png)
+
+example of test broken:
+```yml
+      - name: Test code
+        id: run-tests
+        run: npm run test
+      # test report make sense when we have failure report 
+      # there for make if condition for that
+      # like if the step run test failed     
+      - name: Upload test report
+        if: failure() && steps.run-tests.outcome == 'failure'
+        # upload test report 
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-report
+          path: test.json
+```
+![test broken](image-3.png)
+
 ## understanding and using matrix strategies
 
 ## including and excluding values (matrix strategy)
