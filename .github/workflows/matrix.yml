@@ -3,6 +3,9 @@ on: push
 jobs:
     build:
     # to run same job with different configuration use matrix
+    # it might be one of the node-version does not support all the features needed
+    # in this case we use continue with error because of one node other nodes evaluation or execution dont stop
+        continue-on-error: true
         strategy:
             matrix:
                 node-version: [12, 14, 16]
