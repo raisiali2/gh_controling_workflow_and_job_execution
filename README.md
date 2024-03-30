@@ -138,6 +138,9 @@ example of test broken:
 ```
 ![test broken](image-3.png)
 
+`if check:` for executing some selective workflow
+
+
 ## understanding and using matrix strategies
 
 ## including and excluding values (matrix strategy)
