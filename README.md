@@ -51,7 +51,11 @@ but still it is not enough, even by adding the `if` condition we still see that 
 because still we did not change the default behavior of github action to do that we need to use `failure()` function.
 
 ## working with special conditional function
-a function such as `failure()`
+there are 4 conditional functions in github
+1. `failure()`: returns true when any previous step or job failed
+2. `success()` returns true when none of the previous steps have failed
+3. `always()` causes the step to always execute, even when cancelled
+4. `cancelled()` returns true if the workflow has been cancelled
 
 ## conditional jobs
 
