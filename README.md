@@ -594,5 +594,156 @@ jobs:
 ```
 
 ## reusable workflows outputs
+the same as we set inputs for workflow we can set outputs for workflow that take outputs of step and set it as out put for job then pass it as  
+output for workflow then from this workflow pass the result as output to another workflow.
+
+`reusable.yml`
+
+```yml
+name: reusable deploy
+on: 
+  workflow_call:
+    inputs:
+      artifact-name:
+        description: the name of the deployable artifact files
+        required: false
+        default: dist
+        type: string
+      # passing secret
+      # secrets:
+      #   some-secret:
+      #     required: false
+    outputs:
+      result:
+        description: the result of the deployment operation
+        value: ${{ jobs.deploy.outputs.outcome }}
+jobs:
+  deploy:
+    outputs:
+      outcome: ${{ steps.set-result.outputs.step-result }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: get code
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ inputs.artifact-name }}
+      - name: list files
+        run: ls
+      - name: output information
+        run: echo "deploying and uploading..."
+      - name: set result output
+        id: set-result
+        run: echo "::set-output name=step-result::success"
+```
+`use-reuse.yml`
+
+```yml
+name: using reusable workflow
+on:
+  push:
+    branches:
+      - main
+      - master
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          # path: ~/.npm
+          path: node_modules
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+      - name: Lint code
+        run: npm run lint
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+        # path: ~/.npm
+          path: node_modules
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+      - name: Test code
+        id: run-tests
+        run: npm run test
+      # test report make sense when we have failure report 
+      # there for make if condition for that
+      # like if the step run test failed     
+      - name: Upload test report
+        if: failure() && steps.run-tests.outcome == 'failure'
+        # upload test report 
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-report
+          path: test.json
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+        # path: ~/.npm
+          path: node_modules
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+      - name: Build website
+        id: build-website
+        run: npm run build
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-files
+          path: dist
+  deploy:
+    needs: build
+    uses: ./.github/workflows/reusable.yml
+    with:
+      artifact-name: dist-files
+      # secrets:
+      #   some-secret: ${{ secrets.some-secret }}
+    
+  # job level condition
+  print-deploy-result:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: print deploy output 
+        run: echo "${{ needs.deploy.outputs.result }}"
+  report:
+    needs: [lint, deploy]
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: output information
+        run: |
+          echo "something went wrong"
+          echo "${{ toJson(github) }}"  
+        # output the github context object
+```
+![workflow](image-12.png)
+
+![output success](image-11.png)
+
 
 ## module summary
