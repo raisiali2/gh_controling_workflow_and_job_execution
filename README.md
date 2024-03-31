@@ -747,3 +747,18 @@ jobs:
 
 
 ## module summary
+- conditional jobs & steps
+  - control step or job execution with if & dynamic expressions
+  - change default behavior with failure(), success(), cancelled() or always()
+  - use continue-on-error to ignore step failure
+- matrix jobs
+  - allow a job to run based on multiple configuration
+  - ignore a specific configuration for specific job
+  - add or remove individual combinations
+  - control whether a single failing job should cancel all other matrix jobs via continue-on-error
+- reusable workflows
+  - workflow can be reuse via workflow_call event
+  - reuse any logic (as many jobs & steps as needed)
+  - work with inputs, outputs and secret as required
+  
+![module summary](image-13.png)
