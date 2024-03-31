@@ -83,6 +83,12 @@ jobs:
       #   some-secret: ${{ secrets.some-secret }}
     
   # job level condition
+  print-deploy-result:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: print deploy output 
+        run: echo "${{ needs.deploy.outputs.re }}"
   report:
     needs: [lint, deploy]
     if: failure()
